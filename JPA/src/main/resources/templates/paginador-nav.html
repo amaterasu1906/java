@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="paginator">
+<ul>
+<li>
+<span th:if="${page.first}">Primera</span>
+<a th:if="${!page.first}" th:href="@{${page.url}(page=0)}">Primera</a>
+</li>
+<li>
+<span th:if="${!page.hasPrevious}">Anterior</span>
+<a th:if="${page.hasPrevious}" th:href="@{${page.url}(page=${page.paginaActual-2})}">Anterior</a>
+</li>
+<li></li>
+<li>
+<span th:if="${!page.hasNext}">Siguiente</span>
+<a th:if="${page.hasNext}" th:href="@{${page.url}(page=${page.paginaActual})}">Siguiente</a>
+</li>
+<li>
+<span th:if="${page.last}">Ultima</span>
+<a th:if="${!page.last}" th:href="@{${page.url}(page=${page.totalPaginas-1})}">Ultima</a>
+</li>
+</ul>
+</nav>
+</body>
+</html>
