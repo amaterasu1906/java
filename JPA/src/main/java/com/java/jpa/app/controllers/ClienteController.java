@@ -1,4 +1,4 @@
-package com.java.jpa.app;
+package com.java.jpa.app.controllers;
 
 import javax.validation.Valid;
 
@@ -9,11 +9,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.java.jpa.app.models.entity.Cliente;
 import com.java.jpa.app.services.IClienteService;
 
 @Controller
+@SessionAttributes("cliente")
 public class ClienteController {
 	
 	@Autowired
@@ -35,11 +39,17 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/form/{id}")
-	public String editar(@PathVariable(name = "id") Long id, Model model) {
+	public String editar(@PathVariable(name = "id") Long id, Model model, RedirectAttributes flash) {
 		Cliente cliente = null;
 		if(id>0) {
 			cliente = clienteService.findById(id);
+			if( cliente == null ) {
+				flash.addFlashAttribute("error", "Cliente no encontrado.");
+				return "redirect:/listar";				
+			}
+			flash.addFlashAttribute("success", "Cliente editado exitosamente.");
 		}else {
+			flash.addFlashAttribute("error", "El id del cliente no puede ser 0.");
 			return "redirect:/listar";
 		}
 		model.addAttribute("cliente", cliente);
@@ -48,23 +58,24 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/delete/{id}")
-	public String eliminar(@PathVariable(name = "id") Long id, Model model) {
-		Cliente cliente = null;
+	public String eliminar(@PathVariable(name = "id") Long id, Model model, RedirectAttributes flash) {
 		if(id>0) {
 			clienteService.deleteCliente(id);
+			flash.addFlashAttribute("success", "Cliente eliminado exitosamente.");
 		}
-		model.addAttribute("cliente", cliente);
-		model.addAttribute("titulo", "Formulario del cliente");
 		return "redirect:/listar";
 	}
 	
 	@PostMapping("/form")
-	public String guardar(@Valid Cliente cliente, BindingResult result, Model model) {
+	public String guardar(@Valid Cliente cliente, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status) {
 		if( result.hasErrors()) {
 			model.addAttribute("titulo", "Formulario del cliente");
 			return "form";
 		}
+		String mensajeFlash = (cliente.getId() != null) ? "Cliente editado exitosamente." : "Cliente creado exitosamente.";
 		clienteService.save(cliente);
+		status.setComplete();
+		flash.addFlashAttribute("success", mensajeFlash);
 		return "redirect:/listar";
 	}
 }
