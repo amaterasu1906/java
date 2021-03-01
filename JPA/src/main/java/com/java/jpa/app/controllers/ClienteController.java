@@ -30,7 +30,7 @@ public class ClienteController {
 	
 	@GetMapping("/listar")
 	public String getAllCliente(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
-		Pageable pageRequest = PageRequest.of(page, 4);
+		Pageable pageRequest = PageRequest.of(page, 20);
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
 		
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
