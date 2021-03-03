@@ -1,9 +1,9 @@
-insert into clientes(id, nombre, apellido, email, create_at) values(1,'Kokomi', 'Teruhashi', 'terukoko@gmail.com', '2021-01-01');
-insert into clientes(id, nombre, apellido, email, create_at) values(2,'Chisato', 'Chiyou', 'chisato@gmail.com', '2021-01-01');
-insert into clientes(id, nombre, apellido, email, create_at) values(3,'Kokomi', 'Teruhashi', 'terukoko@gmail.com', '2021-01-01');
-insert into clientes(id, nombre, apellido, email, create_at) values(4,'Chisato', 'Chiyou', 'chisato@gmail.com', '2021-01-01');
-insert into clientes(id, nombre, apellido, email, create_at) values(5,'Kokomi', 'Teruhashi', 'terukoko@gmail.com', '2021-01-01');
-insert into clientes(id, nombre, apellido, email, create_at) values(6,'Chisato', 'Chiyou', 'chisato@gmail.com', '2021-01-01');
-insert into clientes(id, nombre, apellido, email, create_at) values(7,'Kokomi', 'Teruhashi', 'terukoko@gmail.com', '2021-01-01');
-insert into clientes(id, nombre, apellido, email, create_at) values(8,'Chisato', 'Chiyou', 'chisato@gmail.com', '2021-01-01');
-insert into clientes(id, nombre, apellido, email, create_at) values(9,'Kokomi', 'Teruhashi', 'terukoko@gmail.com', '2021-01-01');
+insert into clientes(nombre, apellido, email, create_at, foto) values('Kokomi', 'Teruhashi', 'terukoko@gmail.com', '2021-01-01', '');
+insert into clientes(nombre, apellido, email, create_at, foto) values('Chisato', 'Chiyou', 'chisato@gmail.com', '2021-01-01', '');
+insert into clientes(nombre, apellido, email, create_at, foto) values('Kokomi', 'Teruhashi', 'terukoko@gmail.com', '2021-01-01', '');
+insert into clientes(nombre, apellido, email, create_at, foto) values('Chisato', 'Chiyou', 'chisato@gmail.com', '2021-01-01', '');
+insert into clientes(nombre, apellido, email, create_at, foto) values('Kokomi', 'Teruhashi', 'terukoko@gmail.com', '2021-01-01', '');
+insert into clientes(nombre, apellido, email, create_at, foto) values('Chisato', 'Chiyou', 'chisato@gmail.com', '2021-01-01', '');
+insert into clientes(nombre, apellido, email, create_at, foto) values('Kokomi', 'Teruhashi', 'terukoko@gmail.com', '2021-01-01', '');
+insert into clientes(nombre, apellido, email, create_at, foto) values('Chisato', 'Chiyou', 'chisato@gmail.com', '2021-01-01', '');
+insert into clientes(nombre, apellido, email, create_at, foto) values('Kokomi', 'Teruhashi', 'terukoko@gmail.com', '2021-01-01', '');

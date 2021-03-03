@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/layout :: head"></head>
+<body>
+	<header th:replace="common/layout :: header"></header>
+	<div class="container">
+		<h1 class="text-secondary border-bottom border-success border-4" th:text="${titulo}"></h1>
+		<img th:if="${#strings.length(cliente.foto) > 0}"
+		class="img-thumbnail rounded float-left" style="width: 120px; height: 120px" th:src="@{'/uploads/' + ${cliente.foto}}" th:alt="${cliente.foto}"/>
+		<ul class="list-group">
+			<li class="list-group-item" th:text="${cliente.nombre}"></li>
+			<li class="list-group-item" th:text="${cliente.apellido}"></li>
+			<li class="list-group-item" th:text="${cliente.email}"></li>
+			<li class="list-group-item" th:text="${cliente.createAt}"></li>
+		</ul>
+	</div>
+	<footer th:replace="common/layout :: footer"></footer>
+</body>
+</html>

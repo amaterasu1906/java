@@ -1,5 +1,10 @@
 package com.java.jpa.app.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.java.jpa.app.models.entity.Cliente;
@@ -79,15 +85,39 @@ public class ClienteController {
 	}
 	
 	@PostMapping("/form")
-	public String guardar(@Valid Cliente cliente, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status) {
+	public String guardar(@Valid Cliente cliente, BindingResult result, @RequestParam("file") MultipartFile foto, Model model, RedirectAttributes flash, SessionStatus status) {
 		if( result.hasErrors()) {
 			model.addAttribute("titulo", "Formulario del cliente");
 			return "form";
+		}
+		if( !foto.isEmpty()) {
+			Path ruta = Paths.get("src//main//resources//static//uploads");
+			String rutaAbsoluta = ruta.toFile().getAbsolutePath();
+			try {
+				byte[] bytes = foto.getBytes();
+				Path rutaFinal = Paths.get(rutaAbsoluta+"//"+foto.getOriginalFilename());
+				Files.write(rutaFinal, bytes);
+				flash.addFlashAttribute("info", "Se ha subido correctamente la imagen");
+				cliente.setFoto(foto.getOriginalFilename());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		String mensajeFlash = (cliente.getId() != null) ? "Cliente editado exitosamente." : "Cliente creado exitosamente.";
 		clienteService.save(cliente);
 		status.setComplete();
 		flash.addFlashAttribute("success", mensajeFlash);
 		return "redirect:/listar";
+	}
+	@GetMapping("/ver/{id}")
+	public String verDetalle(@PathVariable(name = "id") Long id, RedirectAttributes flash, Model model) {
+		Cliente cliente = clienteService.findById(id);
+		if(cliente == null) {
+			flash.addFlashAttribute("error", "El cliente no se encontro");
+			return "redirect:/listar";
+		}
+		model.addAttribute("cliente", cliente);
+		model.addAttribute("titulo", "Detalle cliente: ".concat(cliente.getNombre()));
+		return "ver";
 	}
 }
