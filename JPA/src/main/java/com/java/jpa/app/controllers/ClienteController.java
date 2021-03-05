@@ -1,16 +1,17 @@
 package com.java.jpa.app.controllers;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.MalformedURLException;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,14 +26,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.java.jpa.app.models.entity.Cliente;
 import com.java.jpa.app.services.IClienteService;
+import com.java.jpa.app.services.IUploadService;
 import com.java.jpa.app.util.paginator.PageRender;
 
 @Controller
 @SessionAttributes("cliente")
 public class ClienteController {
 	
+	
+	
 	@Autowired
 	private IClienteService clienteService;
+	@Autowired
+	private IUploadService uploadService;
 	
 	@GetMapping("/listar")
 	public String getAllCliente(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
@@ -78,10 +84,26 @@ public class ClienteController {
 	@GetMapping("/delete/{id}")
 	public String eliminar(@PathVariable(name = "id") Long id, Model model, RedirectAttributes flash) {
 		if(id>0) {
+			Cliente cliente = clienteService.findById(id);
 			clienteService.deleteCliente(id);
 			flash.addFlashAttribute("success", "Cliente eliminado exitosamente.");
+			if( uploadService.delete(cliente.getFoto()) )
+				flash.addFlashAttribute("info", "Foto: " + cliente.getFoto() + " ha sido eliminado con exito.");
 		}
 		return "redirect:/listar";
+	}
+	
+	@GetMapping(value="/uploads/{filename:.+}")
+	public ResponseEntity<Resource> verFoto(@PathVariable String filename){
+		Resource recurso = null;
+		try {
+			recurso = uploadService.load(filename);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
+				.body(recurso);
 	}
 	
 	@PostMapping("/form")
@@ -91,17 +113,24 @@ public class ClienteController {
 			return "form";
 		}
 		if( !foto.isEmpty()) {
-			Path ruta = Paths.get("src//main//resources//static//uploads");
-			String rutaAbsoluta = ruta.toFile().getAbsolutePath();
+//			Path ruta = Paths.get("C://Temp//uploads");
+//			String rutaAbsoluta = ruta.toFile().getAbsolutePath();
+			
+			if( cliente.getId() != null
+				&& cliente.getId() > 0
+				&& cliente.getFoto() != null
+				&& cliente.getFoto().length() > 0 ){
+					if(uploadService.delete(cliente.getFoto()))
+						flash.addFlashAttribute("info", "Foto: " + cliente.getFoto() + " ha sido eliminado con exito.");
+				}
+			String uniqueFileName = null;
 			try {
-				byte[] bytes = foto.getBytes();
-				Path rutaFinal = Paths.get(rutaAbsoluta+"//"+foto.getOriginalFilename());
-				Files.write(rutaFinal, bytes);
-				flash.addFlashAttribute("info", "Se ha subido correctamente la imagen");
-				cliente.setFoto(foto.getOriginalFilename());
+				uniqueFileName = uploadService.copy(foto);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			flash.addFlashAttribute("info", "Se ha subido correctamente la imagen");
+			cliente.setFoto(uniqueFileName);
 		}
 		String mensajeFlash = (cliente.getId() != null) ? "Cliente editado exitosamente." : "Cliente creado exitosamente.";
 		clienteService.save(cliente);

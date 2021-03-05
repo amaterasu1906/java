@@ -12,17 +12,17 @@ import com.java.jpa.app.models.entity.Cliente;
 import com.java.jpa.app.services.IClienteService;
 
 @Controller
-@RequestMapping(name = "/factura")
+@RequestMapping(name = "/factura/**")
 public class FacturaController {
 
 	@Autowired
 	private IClienteService clienteService;
 	
-	@GetMapping("/form/{clienteId}")
-	public String crear(@PathVariable(value = "clienteId") Long clienteId, Model model,
-			RedirectAttributes flash) {
-		Cliente cliente = clienteService.findById(clienteId);
-		
-		return "factura/form";
-	}
+//	@GetMapping("/form/{clienteId}")
+//	public String crear(@PathVariable(value = "clienteId") Long clienteId, Model model,
+//			RedirectAttributes flash) {
+//		Cliente cliente = clienteService.findById(clienteId);
+//		
+//		return "factura/form";
+//	}
 }
