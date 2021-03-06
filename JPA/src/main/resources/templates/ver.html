@@ -6,6 +6,10 @@
 	<div class="container">
 		<h1 class="text-secondary border-bottom border-success border-4"
 			th:text="${titulo}"></h1>
+		
+		<a class="btn btn-primary btn-xs" th:text="'Crear factura'"
+						th:href="@{'/factura/form/' + ${cliente.id} }"></a>	
+		
 		<img th:if="${#strings.length(cliente.foto) > 0}"
 			class="img-thumbnail rounded float-left"
 			style="width: 120px; height: 120px"
