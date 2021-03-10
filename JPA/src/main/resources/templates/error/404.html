@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="common/layout :: head"></head>
+<body>
+	<header th:replace="common/layout :: header"></header>
+	<div class="container py-4">
+		<div class="card bg-danger text-white">
+			<div class="card-header">Pagina no encontrada.</div>
+			<div class="card-body">
+				<h5 class="card-title">
+					Lo sentimos el recurso no existe.
+				</h5>
+				<a th:href="@{/listar}" class="btn btn-light" role="button">Ir a inicio</a>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="common/layout :: footer"></footer>
+</body>
+</html>
