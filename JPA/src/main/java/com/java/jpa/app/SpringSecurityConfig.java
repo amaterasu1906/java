@@ -1,5 +1,7 @@
 package com.java.jpa.app;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -34,15 +36,26 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
+	private DataSource dataSource;
+	
+	@Autowired
 	private LoginSuccessHandler successHandler;
 	
 	 @Autowired
 	 public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception{
-		 PasswordEncoder encoder = this.passwordEncoder;
-		 UserBuilder users = User.builder().passwordEncoder(encoder::encode);
-		 builder.inMemoryAuthentication()
-		 .withUser(users.username("admin").password("sa").roles("ADMIN", "USER"))
-		 .withUser(users.username("amat").password("sa").roles("USER"));
+//		 Autenticacion desde memoria, sin DB
+//		 PasswordEncoder encoder = this.passwordEncoder;
+//		 UserBuilder users = User.builder().passwordEncoder(encoder::encode);
+//		 builder.inMemoryAuthentication()
+//		 .withUser(users.username("admin").password("sa").roles("ADMIN", "USER"))
+//		 .withUser(users.username("amat").password("sa").roles("USER"));
+//		 Autenticacion con JDBC
+		 builder.jdbcAuthentication()
+		 .dataSource(dataSource)
+		 .passwordEncoder(passwordEncoder)
+		 .usersByUsernameQuery("select username, password, enabled from users where username=?")
+		 .authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (a.user_id=u.id) where u.username=?")
+		 ;
 	 }
 
 	@Override
