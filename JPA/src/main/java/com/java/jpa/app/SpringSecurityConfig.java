@@ -24,7 +24,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 			"/", 
 			"/css/**", 
 			"/js/**", 
-			"/listar" };
+			"/listar",
+			"/locale"};
 //	private static final String[] rutasUser = { 
 //			"/ver/**", 
 //			"uploads/**" };

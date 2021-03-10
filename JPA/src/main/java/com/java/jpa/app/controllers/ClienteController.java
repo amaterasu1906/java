@@ -3,6 +3,7 @@ package com.java.jpa.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -10,6 +11,7 @@ import javax.validation.Valid;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,10 +52,12 @@ public class ClienteController {
 	private IClienteService clienteService;
 	@Autowired
 	private IUploadService uploadService;
+	@Autowired
+	private MessageSource messageSource;
 	
 	@GetMapping({"/listar", "/"})
 	public String getAllCliente(@RequestParam(name = "page", defaultValue = "0") int page, 
-			Model model, Authentication authentication, HttpServletRequest request) {
+			Model model, Authentication authentication, HttpServletRequest request, Locale locale) {
 		
 		if( authentication != null ) {
 			logger.info("Username: ".concat(authentication.getName()).concat(" ha iniciado sesion"));
@@ -68,31 +72,30 @@ public class ClienteController {
 				logger.info("Hola ".concat(auth.getName()).concat(" no tienes acceso."));
 				
 			}
-		}
-		
-//		Segunda forma con SecurityContextHolderAwareRequestWrapper para validar un Role
-		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
-		if( securityContext.isUserInRole("ADMIN")) {
-			logger.info("[SecurityContextHolderAwareRequestWrapper]Hola ".concat(auth.getName()).concat(" tienes acceso."));
-		}else {
-			logger.info("[SecurityContextHolderAwareRequestWrapper]Hola ".concat(auth.getName()).concat(" no tienes acceso."));
+//			Segunda forma con SecurityContextHolderAwareRequestWrapper para validar un Role
+			SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
+			if( securityContext.isUserInRole("ADMIN")) {
+				logger.info("[SecurityContextHolderAwareRequestWrapper]Hola ".concat(auth.getName()).concat(" tienes acceso."));
+			}else {
+				logger.info("[SecurityContextHolderAwareRequestWrapper]Hola ".concat(auth.getName()).concat(" no tienes acceso."));
+				
+			}
 			
-		}
-//		Tercera forma con HttpServletRequest se requiere el nombre completo
-		if( request.isUserInRole("ROLE_ADMIN")) {
-			logger.info("[HttpServletRequest]Hola ".concat(auth.getName()).concat(" tienes acceso."));
-		}else {
-			logger.info("[HttpServletRequest]Hola ".concat(auth.getName()).concat(" no tienes acceso."));
-			
+//			Tercera forma con HttpServletRequest se requiere el nombre completo
+			if( request.isUserInRole("ROLE_ADMIN")) {
+				logger.info("[HttpServletRequest]Hola ".concat(auth.getName()).concat(" tienes acceso."));
+			}else {
+				logger.info("[HttpServletRequest]Hola ".concat(auth.getName()).concat(" no tienes acceso."));
+				
+			}
 		}
 		
-		
-		Pageable pageRequest = PageRequest.of(page, 20);
+		Pageable pageRequest = PageRequest.of(page, 3);
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
 		
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
 		
-		model.addAttribute("titulo", "Mostrando la lista de clientes");
+		model.addAttribute("titulo", messageSource.getMessage("text.cliente.listar.titulo", null, locale));
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("page", pageRender);
 //		model.addAttribute("clientes", clienteService.findAll());
