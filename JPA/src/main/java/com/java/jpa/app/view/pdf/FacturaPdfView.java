@@ -1,4 +1,4 @@
-package com.java.jpa.app.pdf.view;
+package com.java.jpa.app.view.pdf;
 
 import java.awt.Color;
 import java.util.Locale;
