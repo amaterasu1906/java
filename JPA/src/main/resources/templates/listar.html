@@ -9,6 +9,7 @@
 			th:text="${titulo}"></h1>
 		<h3>
 			<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" href="/form">Crear cliente</a>
+			<a th:href="@{'/listar'(format=csv)}" class="btn btn-outline-danger btn-xs float-right mb-2">Exportar CSV</a>
 		</h3>
 		<table class="table table-striped">
 			<thead>
