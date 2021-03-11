@@ -20,7 +20,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ * @author AMATERASU1906
+ *
+ */
 @Entity
 @Table(name = "facturas")
 public class Factura implements Serializable{
@@ -46,6 +51,10 @@ public class Factura implements Serializable{
 	
 	public List<ItemFactura> getItems() {
 		return items;
+	}
+
+	public void setItems(List<ItemFactura> items) {
+		this.items = items;
 	}
 
 	public void addItemsFactura(ItemFactura factura) {
@@ -97,6 +106,8 @@ public class Factura implements Serializable{
 		this.createAt = createAt;
 	}
 
+//	Omite este atributo en la serializacion, no lo incluye en el XML
+	@XmlTransient
 	public Cliente getCliente() {
 		return cliente;
 	}
