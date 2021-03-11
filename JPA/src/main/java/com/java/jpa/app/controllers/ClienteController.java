@@ -3,6 +3,7 @@ package com.java.jpa.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+//import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +43,7 @@ import com.java.jpa.app.models.entity.Cliente;
 import com.java.jpa.app.services.IClienteService;
 import com.java.jpa.app.services.IUploadService;
 import com.java.jpa.app.util.paginator.PageRender;
+import com.java.jpa.app.view.xml.ClienteList;
 
 @Controller
 @SessionAttributes("cliente")
@@ -54,6 +57,14 @@ public class ClienteController {
 	private IUploadService uploadService;
 	@Autowired
 	private MessageSource messageSource;
+	
+	@GetMapping("/listar-rest")
+	public @ResponseBody ClienteList restListar(){
+//		Primera forma retornando un List<Cliente>, retornar del mismo tipo
+//		return clienteService.findAll();
+//		Segunda forma, retornando un wrapper, para obtener un json y un XML
+		return new ClienteList(clienteService.findAll());
+	}
 	
 	@GetMapping({"/listar", "/"})
 	public String getAllCliente(@RequestParam(name = "page", defaultValue = "0") int page, 
