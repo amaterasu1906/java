@@ -1,6 +1,7 @@
 package com.java.jpa.app.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ public class ClienteRestController {
 	private IClienteService clienteService;
 	
 	@GetMapping("/listar")
+	@Secured("ROLE_USER")
 	public ClienteList listar(){
 //		Primera forma retornando un List<Cliente>, retornar del mismo tipo
 //		return clienteService.findAll();
