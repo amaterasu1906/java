@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="common/layout :: head"></head>
+<body>
+	<header th:replace="common/layout :: header"></header>
+	<div class="container">
+		<h1 class="text-secondary border-bottom border-success border-4"
+			th:text="${titulo}"></h1>
+		
+		<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:text="'Crear factura'"
+						th:href="@{'/factura/form/' + ${cliente.id} }"></a>	
+		
+		<img th:if="${#strings.length(cliente.foto) > 0}"
+			class="img-thumbnail rounded float-left"
+			style="width: 120px; height: 120px"
+			th:src="@{'/uploads/' + ${cliente.foto}}" th:alt="${cliente.foto}" />
+		<ul class="list-group">
+			<li class="list-group-item" th:text="${cliente.nombre}"></li>
+			<li class="list-group-item" th:text="${cliente.apellido}"></li>
+			<li class="list-group-item" th:text="${cliente.email}"></li>
+			<li class="list-group-item" th:text="${cliente.createAt}"></li>
+		</ul>
+
+		<div th:if="${#lists.isEmpty(cliente.facturas)}" class="alert alert-info my-4" th:text="'No hay facturas para '+ ${cliente.nombre}"></div>
+		<table th:if="${not #lists.isEmpty(cliente.facturas)}" class="table table-bordered table-striper my-4">
+			<thead class="thead-dark">
+				<tr>
+					<th>Folio</th>
+					<th>Descripcion</th>
+					<th>Fecha</th>
+					<th>Total</th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')">Ver</th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="factura: ${cliente.facturas}">
+					<td th:text="${factura.id}"></td>
+					<td th:text="${factura.descripcion}"></td>
+					<td th:text="${factura.createAt}"></td>
+					<td th:text="${factura.total}"></td>
+					<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs" th:href="@{'/factura/ver/'+ ${factura.id}}" th:text="detalle"></a></td>
+					<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs" th:href="@{'/factura/eliminar/'+ ${factura.id}}" th:text="Eliminar"
+						onclick='return confirm("Estas seguro que desea eliminar la factura?")'
+					></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="common/layout :: footer"></footer>
+</body>
+</html>
