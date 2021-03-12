@@ -8,11 +8,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 //import org.springframework.security.core.userdetails.User;
 //import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.java.jpa.app.auth.filter.JWTAuthenticationFilter;
 import com.java.jpa.app.auth.handler.LoginSuccessHandler;
 import com.java.jpa.app.services.JpaUserDetailService;
 
@@ -25,7 +27,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 			"/css/**", 
 			"/js/**", 
 			"/listar**",
-			"/api/**",
 			"/locale"};
 //	private static final String[] rutasUser = { 
 //			"/ver/**", 
@@ -78,7 +79,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 //		.antMatchers(rutasUser).hasAnyRole("USER")
 //		.antMatchers(rutasAdmin).hasAnyRole("ADMIN")
 		.anyRequest().authenticated()
-		.and()
+		/*.and()
 			.formLogin()
 				.successHandler(successHandler)
 				.loginPage("/login")
@@ -88,7 +89,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 				.permitAll()
 		.and()
 			.exceptionHandling()
-				.accessDeniedPage("/error_403")
+				.accessDeniedPage("/error_403")*/
+		.and()
+		.addFilter(new JWTAuthenticationFilter(authenticationManager()))
+		.csrf().disable()
+		.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		;
 	}
 	 
