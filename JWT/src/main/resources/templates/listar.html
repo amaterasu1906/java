@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="common/layout :: head"></head>
+<body>
+	<header th:replace="common/layout :: header"></header>
+	<div class="container">
+		<h1 class="text-secondary border-bottom border-success border-4"
+			th:text="${titulo}"></h1>
+		<h3>
+			<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" href="/form">Crear cliente</a>
+			<a th:href="@{'/listar'(format=csv)}" class="btn btn-outline-danger btn-xs float-right mb-2">Exportar CSV</a>
+			<a th:href="@{'/listar'(format=xml)}" class="btn btn-outline-secondary btn-xs float-right mb-2">Exportar XML</a>
+			<a th:href="@{'/listar'(format=json)}" class="btn btn-outline-warning btn-xs float-right mb-2">Exportar JSON</a>
+		</h3>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th sec:authorize="hasRole('ROLE_USER')">id</th>
+					<th th:text="#{text.cliente.nombre}">nombre</th>
+					<th th:text="#{text.cliente.apellido}">apellido</th>
+					<th th:text="#{text.cliente.email}">email</th>
+					<th th:text="#{text.cliente.createAt}">fecha</th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')">Crear Factura</th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="cliente: ${clientes}">
+					<td sec:authorize="hasRole('ROLE_USER')"> <a class="btn btn-primary btn-xs" th:href="@{/ver/} + ${cliente.id}" th:text="${cliente.id}"></a> </td>
+					<td th:text="${cliente.nombre}"></td>
+					<td th:text="${cliente.apellido}"></td>
+					<td th:text="${cliente.email}"></td>
+					<td th:text="${cliente.createAt}"></td>
+					<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-success btn-xs" th:text="'Crear factura'"
+						th:href="@{'/factura/form/' + ${cliente.id} }"></a></td>
+					<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs"
+						th:href="@{/form/} + ${cliente.id}" th:text="Editar"></a></td>
+					<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs"
+						th:href="@{/delete/} + ${cliente.id}" th:text="Eliminar"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		<nav th:replace="paginador-nav :: paginator"></nav>
+	</div>
+	<footer th:replace="common/layout :: footer"></footer>
+</body>
+</html>
