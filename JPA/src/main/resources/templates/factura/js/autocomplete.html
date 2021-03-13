@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf,org/">
 <body>
 	<script type="text/javascript" th:fragment="autocomplet">
+	var url = $('#urlAjax').val();
 		$(document).ready( function(){
 			$("#buscar_producto").autocomplete({
 				source: function( request, response){
 					$.ajax({
-						url: "/factura/cargar-productos/" + request.term,
+						url: url + request.term,
 						dataType: "json",
 						data:{
 							term: request.term
