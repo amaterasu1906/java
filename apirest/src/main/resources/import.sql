@@ -1,0 +1,10 @@
+insert into clientes( nombre, apellido, email, create_at) values('Kokomi', 'Teruhashi', 'kokomi@gmail.com', '2021-01-03');
+insert into clientes( nombre, apellido, email, create_at) values('Chisato', 'Mera', 'Chisato@gmail.com', '2021-01-03');
+insert into clientes( nombre, apellido, email, create_at) values('Yumehara', 'Chiyou', 'Yumehara@gmail.com', '2021-01-03');
+insert into clientes( nombre, apellido, email, create_at) values('Wendy', 'Marver', 'Wendy@gmail.com', '2021-01-03');
+insert into clientes( nombre, apellido, email, create_at) values('Lucy', 'Heartfilia', 'Lucy@gmail.com', '2021-01-03');
+insert into clientes( nombre, apellido, email, create_at) values('Erza', 'Scarlet', 'Erza@gmail.com', '2021-01-03');
+insert into clientes( nombre, apellido, email, create_at) values('Mira', 'Straus', 'Mira@gmail.com', '2021-01-03');
+insert into clientes( nombre, apellido, email, create_at) values('Haruhi', 'Suzumiya', 'Haruhi@gmail.com', '2022-01-03');
+insert into clientes( nombre, apellido, email, create_at) values('Mikuru', 'Asahina', 'Mikuru@gmail.com', '2021-01-03');
+insert into clientes( nombre, apellido, email, create_at) values('Nagato', 'Yuki', 'Nagato@gmail.com', '2021-01-03');
