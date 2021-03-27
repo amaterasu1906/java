@@ -12,4 +12,10 @@ public class ExamenRepository implements IExamenRepository {
 		return null;
 	}
 
+	@Override
+	public Examen guardar(Examen examen) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
