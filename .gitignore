@@ -1,2 +1,8 @@
 
 .project
+
+forms/Forms/bin/
+
+JPA/bin/
+
+JWT/bin/
