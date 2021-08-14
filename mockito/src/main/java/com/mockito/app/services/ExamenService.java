@@ -29,7 +29,7 @@ public class ExamenService implements IExamenService{
 		Optional<Examen> examenOptiona = findExamenPorNombre(nombre);
 		Examen examen = null;
 		if( examenOptiona.isPresent()) {
-			examen = examenOptiona.orElseThrow();
+			examen = examenOptiona.orElseThrow(null);
 			List<String> preguntas = preguntaRepository.findPreguntasPorExamenId(examen.getId());
 			examen.setPreguntas(preguntas);
 		}
